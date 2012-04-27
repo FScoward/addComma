@@ -57,28 +57,31 @@ object Main {
     val comma_pos = Source.fromFile("comma_pos.txt")
     val positions = comma_pos.mkString.split(",")
 
-    val out = new FileOutputStream("out.txt", true)
-    val writer = new OutputStreamWriter(out)
-
     // 1行ずつ読み込み
-    source.getLines().foreach(x => {
+    source.getLines().foreach(line => {
       var j = 0
-      var temp = ""
-
-      positions.foreach(i => {
-        var k = i.toInt
-        temp += x.subSequence(j, k + j) + ","
-        j = j + k
-      })
-
+      
+      val a = for(pos <- positions) yield {
+        val temp = line.subSequence(j, pos.toInt + j) + ","
+        j = j + pos.toInt
+        temp.mkString
+      }
+      
       // 最後のコンマを削除
-      temp = temp.dropRight(1)
+      val b = a.mkString.dropRight(1)
 
+      println(b)
       // 書き出し
-      writer.write(temp + "\r\n")
-
+      mkFile(b)
     })
-    writer.close()
 
   }
+  
+  def mkFile(line: String):Unit = {
+    val out = new FileOutputStream("out.txt", true)
+    val writer = new OutputStreamWriter(out)
+    writer.write(line + "\r\n")
+    writer.close()
+  }
+  
 }
