@@ -64,7 +64,7 @@ object Main {
       val a = for(pos <- positions) yield {
         val temp = line.subSequence(j, pos.toInt + j) + ","
         j = j + pos.toInt
-        temp.mkString
+        temp
       }
       
       // 最後のコンマを削除
